@@ -21,7 +21,6 @@ export const Slider = ({
   const { scrollTo } = useSlider({ width, height, backgroundColor, rootElementRef: canvas, images });
   const machine = useMemo(() => sliderMachine({ onScrollTo: scrollTo }), [scrollTo]);
   const [state, send] = useMachine(machine, { devTools: true });
-
   const isDragging = state.matches("dragging");
 
   return (
