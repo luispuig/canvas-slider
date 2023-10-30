@@ -1,7 +1,5 @@
 import * as PIXI from "pixi.js";
-import { AppLoaderPlugin } from "@pixi/loaders";
 import { useCallback, useEffect, useRef } from "react";
-PIXI.extensions.add(AppLoaderPlugin);
 
 const removeChildren = (element: HTMLDivElement) => {
   if (!element) return;
