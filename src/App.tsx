@@ -1,35 +1,20 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Slider } from "./Slider";
+
+import "./App.css";
+
+const IMAGES = [
+  "https://medias.franceantilles.fr/api/v1/images/view/62b9d0a03766fd5b1b7d5042/width_1000/image.jpg",
+  "https://www.laxcali.com/uploads/newsarticle/0b1771eeab904f28b47bdf4518dfec4e/bob.jpeg",
+  "https://blackbookswholesale.com/cdn/shop/products/ScreenShot2021-02-09at10.09.59AM_5e294b4e-da5f-4e81-9a8c-adcc47bb9261_1024x1024.png?v=1617361845",
+];
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <h1>Canvas slider</h1>
+      <Slider images={IMAGES} width={640} height={400} />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
