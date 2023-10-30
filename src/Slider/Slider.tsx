@@ -27,7 +27,7 @@ export const Slider = ({
     <div
       ref={canvas}
       onMouseDown={(event) => send({ type: "mouseDown", event })}
-      className={cx(className, { "cursor-grabbing": isDragging }, { "cursor-grab": !isDragging })}
+      className={cx(className, "overflow-hidden", { "cursor-grabbing": isDragging }, { "cursor-grab": !isDragging })}
       style={{ width, height, backgroundColor }}
     />
   );
