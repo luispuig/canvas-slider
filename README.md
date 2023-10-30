@@ -1,17 +1,17 @@
 # Canvas Slider
 
-## How to see a demo
+## How to See a Demo
 
-The project can be tested at [https://canvas-slider-lpg.netlify.app/](https://canvas-slider-lpg.netlify.app/)
+The project can be tested at [https://canvas-slider-lpg.netlify.app/](https://canvas-slider-lpg.netlify.app/).
 
-If you prefer to run it locally you can clone the repository and run the following commands:
+If you prefer to run it locally, you can clone the repository and run the following commands:
 
 ```bash
 npm install
 npm run preview
 ```
 
-The build is already uploaded in the project's dist folder. If you want to build it again you can run:
+The build is already uploaded in the project's dist folder. If you want to build it again, you can run:
 
 ```bash
 npm install
@@ -31,17 +31,17 @@ For this project I used the following technologies:
 - XState
 - PixiJS
 
-**IMPORTANT NOTE**: Read the `process decision section` to understand the reason behind the technologies used, the decisions made and the alternatives considered.
+**IMPORTANT NOTE**: Read the `decision process section` to understand the reason behind the technologies used, the decisions made and the alternatives considered.
 
 ## Possible improvements or iterations
 
 - Add tests
 - Improve the PixiJS implementation to reduce the bundle size
 - Implement image lazy loading
-- Use a lower level library or none library to manage the canvas. Read the `process decision section` for more options with its challenges and benefits.
+- Use a lower level library or none library to manage the canvas. Read the `decision process section` for more options with its challenges and benefits.
 - Create a guide for other developers to use the Slider component.
 
-## Process decision
+## Decision process
 
 ### Considerations and challenges
 
@@ -87,9 +87,9 @@ The main benefits will be:
 
 #### OPTION 2: React-canvas
 
-React canvas is a React layer to use canvas. It is created with performance in mind. It removes all the imperative interface of canvas, offering a declarative interface. It seems to be quite old. In case this would be in a real production scenario, I’d recommend researching for more on the options.
+React canvas is a React layer to use canvas. It is created with performance in mind. It removes all the imperative interface of canvas, offering a declarative interface. It seems to be quite old. In case this would be in a real production scenario, I’d recommend researching more on the options.
 
-It solves some of the challenges of the vanilla javascript implementation:
+It solves some of the challenges of the vanilla JavaScript implementation:
 
 - Deal with browser compatibilities
 - Deal with the request of the images to render them into the canvas
