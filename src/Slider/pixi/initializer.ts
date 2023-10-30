@@ -126,6 +126,8 @@ export const useSlider = ({
       if (pixels <= minScroll) scrollContainer.current.x = minScroll * -1;
       else if (pixels >= maxScroll) scrollContainer.current.x = maxScroll * -1;
       else scrollContainer.current.x = pixels * -1;
+
+      return scrollContainer.current.x * -1;
     },
     [maxScroll]
   );

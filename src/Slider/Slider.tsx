@@ -1,20 +1,20 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
+import { useMachine } from "@xstate/react";
 import { useSlider } from "./pixi/initializer";
+import { sliderMachine } from "./machine";
 
 export const Slider = ({ images, width, height }: { images: string[]; width: number; height: number }) => {
-  const [left, setLeft] = useState(0);
   const canvas = useRef<HTMLDivElement>(null);
 
-  const { mount, unmount, scrollTo, minScroll, maxScroll } = useSlider({
+  const { mount, unmount, scrollTo } = useSlider({
     width,
     height,
     rootElementRef: canvas,
     images,
   });
 
-  useEffect(() => {
-    scrollTo(left);
-  }, [left, scrollTo]);
+  const machine = useMemo(() => sliderMachine({ onScrollTo: scrollTo }), [scrollTo]);
+  const [, send] = useMachine(machine, { devTools: true });
 
   useEffect(() => {
     if (!canvas.current) return;
@@ -24,9 +24,13 @@ export const Slider = ({ images, width, height }: { images: string[]; width: num
 
   return (
     <>
-      <div ref={canvas} />
-      <button onClick={() => setLeft((prev) => Math.max(prev - 100, minScroll))}>left</button>
-      <button onClick={() => setLeft((prev) => Math.min(prev + 100, maxScroll))}>right</button>
+      <div
+        ref={canvas}
+        onMouseDown={(event) => send({ type: "mouseDown", event })}
+        onMouseMove={(event) => send({ type: "mouseMove", event })}
+        onMouseUp={(event) => send({ type: "mouseUp", event })}
+        onMouseLeave={(event) => send({ type: "mouseUp", event })}
+      />
     </>
   );
 };
