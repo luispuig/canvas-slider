@@ -1,33 +1,32 @@
 import { useEffect, useRef, useState } from "react";
-import { initializePixi } from "./pixi/initializer";
+import { useSlider } from "./pixi/initializer";
 
 export const Slider = ({ images, width, height }: { images: string[]; width: number; height: number }) => {
   const [left, setLeft] = useState(0);
   const canvas = useRef<HTMLDivElement>(null);
-  const tmp = useRef<(pixels: number) => void>();
+
+  const { mount, unmount, scrollTo, minScroll, maxScroll } = useSlider({
+    width,
+    height,
+    rootElementRef: canvas,
+    images,
+  });
 
   useEffect(() => {
-    console.log(left);
-    tmp.current?.(left);
-  }, [left]);
+    scrollTo(left);
+  }, [left, scrollTo]);
 
   useEffect(() => {
     if (!canvas.current) return;
-    const { unmount, scrollTo } = initializePixi({
-      rootElement: canvas.current,
-      width,
-      height,
-      images,
-    });
-    tmp.current = scrollTo;
+    mount();
     return unmount;
-  }, [height, images, width]);
+  }, [mount, unmount]);
 
   return (
     <>
       <div ref={canvas} />
-      <button onClick={() => setLeft((prev) => prev - 100)}>left</button>
-      <button onClick={() => setLeft((prev) => prev + 100)}>right</button>
+      <button onClick={() => setLeft((prev) => Math.max(prev - 100, minScroll))}>left</button>
+      <button onClick={() => setLeft((prev) => Math.min(prev + 100, maxScroll))}>right</button>
     </>
   );
 };
