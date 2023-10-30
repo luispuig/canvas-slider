@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js";
 import { AppLoaderPlugin } from "@pixi/loaders";
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 PIXI.extensions.add(AppLoaderPlugin);
 
 const removeChildren = (element: HTMLDivElement) => {
@@ -68,11 +68,13 @@ export const useSlider = ({
   width,
   height,
   images,
+  backgroundColor,
 }: {
   rootElementRef: { current: HTMLDivElement | null };
   width: number;
   height: number;
   images: string[];
+  backgroundColor: string;
 }) => {
   const pixiApp = useRef<PIXI.Application<PIXI.ICanvas>>();
   const scrollContainer = useRef<PIXI.Container>();
@@ -84,7 +86,7 @@ export const useSlider = ({
       height,
       antialias: true,
       sharedTicker: false,
-      backgroundColor: 0xf2f2f2,
+      backgroundColor,
     });
     pixiApp.current.stage.sortableChildren = true;
     rootElementRef.current.appendChild(pixiApp.current.view as unknown as Node);
@@ -109,7 +111,7 @@ export const useSlider = ({
         scrollContainer.current.addChild(sprite);
       });
     });
-  }, [height, images, rootElementRef, width]);
+  }, [backgroundColor, height, images, rootElementRef, width]);
 
   const unmount = useCallback(() => {
     pixiApp.current?.destroy();
@@ -117,11 +119,16 @@ export const useSlider = ({
     if (rootElementRef.current !== null) removeChildren(rootElementRef.current);
   }, [rootElementRef]);
 
-  const minScroll = 0;
-  const maxScroll = width * (images.length - 1);
+  useEffect(() => {
+    if (!rootElementRef.current) return;
+    mount();
+    return unmount;
+  }, [mount, rootElementRef, unmount]);
 
   const scrollTo = useCallback(
     (pixels: number) => {
+      const minScroll = 0;
+      const maxScroll = width * (images.length - 1);
       if (!pixiApp.current || !scrollContainer.current) return;
       if (pixels <= minScroll) scrollContainer.current.x = minScroll * -1;
       else if (pixels >= maxScroll) scrollContainer.current.x = maxScroll * -1;
@@ -129,8 +136,8 @@ export const useSlider = ({
 
       return scrollContainer.current.x * -1;
     },
-    [maxScroll]
+    [images.length, width]
   );
 
-  return { mount, unmount, scrollTo, minScroll, maxScroll };
+  return { scrollTo };
 };

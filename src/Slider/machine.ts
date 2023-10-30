@@ -22,7 +22,7 @@ type Event =
 export const sliderMachine = ({ onScrollTo }: { onScrollTo: (pixels: number) => number | undefined }) =>
   createMachine(
     {
-      /** @xstate-layout N4IgpgJg5mDOIC5SwDYEsJgE4FkCGAxgBZoB2YAdBimAMQC2A9gK6xgAijA7qQNoAMAXUSgADo1hoALmkakRIAB6IATCoCsFABwBOAOwAWPQEZ+elXr3qAzABoQAT0R7rFY+q38tKrzv4atawBfIPtUDGx8YjJKCCw8KCgyKAYWNgBVUQFhJBBxSRk5BWUEH00dADYtdQ8dFR0tLQr+O0dVCwodHRqKg2brSu8KkLD0TFxCEnIKOISk0hSmVjAcRgA3MGyFfOlZeVySq01jXoMVYx0TjTV7JwQL12sVLQMW-0tqjxGQcPGoqdi8USyVSywAMmA8BstrkdoV9qASmoVBQzic9JVXi4erdEE9XJUnvUvJ5qsFvqRGJh4LlfpFJjFthJdkUDohjCpcQgALTGAwUawGB6vawVDm9XTfOkTaLTahgJkFPbFRDNLkNCjqKVjemywFzZKKlkIpSIGx6ChlfgVAYDCpqPTqipuQUVCqWFRVTzGPQhEJAA */
+      /** @xstate-layout N4IgpgJg5mDOIC5SwDYEsJgE4FkCGAxgBZoB2YAdBimAMQC2A9gK6xgAijA7qQNoAMAXUSgADo1hoALmkakRIAB6IATCoCsFABwBOAOwAWPQEZ+elXr3qAzABoQAT0R7rFY+q38tKrzv4atawBfIPtUDGx8YjJKCCw8KCgyKAYWNgBVUQFhJBBxSRk5BWUEH00dADYtdQ8dFR0tLQr+O0dVCwodHRqKg2brSu8KkLD0TFxCEnIKOISk0hSmVjAcRgA3MGyFfOlZeVySq01jXoMVYx0TjTV7JwQL12sVLQMW-0tqjxGQcPGoqdi8USyVSywAMmA8BstrkdoV9qASmoVBQzic9JVXi4erdEE9XJUnvUvJ5qsFvqRGJh4LlfpFJjFthJdkUDohjCpcQgALTGAwUawGC78XqVCxqLTfOkTaLTahgJkFPbFRDNLkNCjqKVjemywFzZKKlkIpSIGx6ChlEUDAYVNR6dUVNyCioVSwqKqeYx6EIhIA */
       id: "sliderMachine",
       predictableActionArguments: true,
       schema: {
@@ -64,6 +64,10 @@ export const sliderMachine = ({ onScrollTo }: { onScrollTo: (pixels: number) => 
               actions: "assignScrollPosition",
             },
           },
+
+          invoke: {
+            src: "enableListeners",
+          },
         },
       },
     },
@@ -81,6 +85,22 @@ export const sliderMachine = ({ onScrollTo }: { onScrollTo: (pixels: number) => 
             context.scroll.left = onScrollTo(scrollLeft) ?? 0;
           }
         }),
+      },
+      services: {
+        enableListeners: () => (send) => {
+          const onMouseMove = (event: MouseEvent) =>
+            send({ type: "mouseMove", event: event as unknown as ReactMouseEvent<HTMLDivElement, MouseEvent> });
+          document.addEventListener("mousemove", onMouseMove);
+
+          const onMouseUp = (event: MouseEvent) =>
+            send({ type: "mouseUp", event: event as unknown as ReactMouseEvent<HTMLDivElement, MouseEvent> });
+          document.addEventListener("mouseup", onMouseUp);
+
+          return () => {
+            document.removeEventListener("mousemove", onMouseMove);
+            document.removeEventListener("mouseup", onMouseUp);
+          };
+        },
       },
     }
   );

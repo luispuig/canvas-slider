@@ -5,7 +5,9 @@ export interface Typegen0 {
   internalEvents: {
     "xstate.init": { type: "xstate.init" };
   };
-  invokeSrcNameMap: {};
+  invokeSrcNameMap: {
+    enableListeners: "done.invoke.sliderMachine.dragging:invocation[0]";
+  };
   missingImplementations: {
     actions: never;
     delays: never;
@@ -18,7 +20,9 @@ export interface Typegen0 {
   };
   eventsCausingDelays: {};
   eventsCausingGuards: {};
-  eventsCausingServices: {};
+  eventsCausingServices: {
+    enableListeners: "mouseDown" | "mouseMove";
+  };
   matchesStates: "dragging" | "idle";
   tags: never;
 }

@@ -1,36 +1,34 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useMemo, useRef } from "react";
 import { useMachine } from "@xstate/react";
-import { useSlider } from "./pixi/initializer";
+import { useSlider } from "./pixi/canvasSlider";
 import { sliderMachine } from "./machine";
+import cx from "classnames";
 
-export const Slider = ({ images, width, height }: { images: string[]; width: number; height: number }) => {
+export const Slider = ({
+  images,
+  width,
+  height,
+  backgroundColor,
+  className,
+}: {
+  images: string[];
+  width: number;
+  height: number;
+  className?: string;
+  backgroundColor: string;
+}) => {
   const canvas = useRef<HTMLDivElement>(null);
-
-  const { mount, unmount, scrollTo } = useSlider({
-    width,
-    height,
-    rootElementRef: canvas,
-    images,
-  });
-
+  const { scrollTo } = useSlider({ width, height, backgroundColor, rootElementRef: canvas, images });
   const machine = useMemo(() => sliderMachine({ onScrollTo: scrollTo }), [scrollTo]);
-  const [, send] = useMachine(machine, { devTools: true });
+  const [state, send] = useMachine(machine, { devTools: true });
 
-  useEffect(() => {
-    if (!canvas.current) return;
-    mount();
-    return unmount;
-  }, [mount, unmount]);
+  const isDragging = state.matches("dragging");
 
   return (
-    <>
-      <div
-        ref={canvas}
-        onMouseDown={(event) => send({ type: "mouseDown", event })}
-        onMouseMove={(event) => send({ type: "mouseMove", event })}
-        onMouseUp={(event) => send({ type: "mouseUp", event })}
-        onMouseLeave={(event) => send({ type: "mouseUp", event })}
-      />
-    </>
+    <div
+      ref={canvas}
+      onMouseDown={(event) => send({ type: "mouseDown", event })}
+      className={cx(className, { "cursor-grabbing": isDragging }, { "cursor-grab": !isDragging })}
+    />
   );
 };
