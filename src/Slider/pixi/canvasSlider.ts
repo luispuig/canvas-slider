@@ -25,7 +25,7 @@ export const initializePixi = ({
     height,
     antialias: true,
     sharedTicker: false,
-    backgroundColor: "#F2F2F2",
+    backgroundColor: "##FFFFFF",
   });
   pixiApp.stage.sortableChildren = true;
   rootElement.appendChild(pixiApp.view as unknown as Node);
